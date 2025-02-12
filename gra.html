@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Licznik Sipow</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background: linear-gradient(to right, #ff7e5f, #feb47b);
+        color: #333;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .image-container {
+        width: 500px;
+      }
+
+      .image-container img {
+        width: 100%;
+        border-radius: 10px;
+      }
+
+      .content {
+        flex-grow: 1;
+        text-align: center;
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 2em;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      #players {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-width: 400px;
+        margin: 0 auto;
+      }
+
+      .player {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba(255, 255, 255, 0.8);
+        padding: 15px;
+        border-radius: 10px;
+        transition: transform 0.2s ease, background 0.3s ease;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+      }
+
+      .player:hover {
+        transform: scale(1.05);
+        background: rgba(255, 255, 255, 1);
+      }
+
+      .player-name {
+        font-weight: bold;
+        font-size: 1.2em;
+      }
+
+      .player-counter {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #ff7e5f;
+      }
+
+      .remove-btn {
+        background-color: red;
+        color: white;
+        border: none;
+        padding: 7px 10px;
+        cursor: pointer;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: background 0.3s ease;
+      }
+
+      .remove-btn:hover {
+        background-color: darkred;
+      }
+
+      .controls {
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      .controls button {
+        background: #ff7e5f;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 1em;
+        font-weight: bold;
+        transition: background 0.3s ease;
+      }
+
+      .controls button:hover {
+        background: #e66a50;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="image-container">
+      <img src="Wódka-Żubrówka-Biała.png" alt="Left Image" />
+    </div>
+
+    <div class="content">
+      <h1>Licznik Sipow</h1>
+      <div id="players"></div>
+      <div class="controls">
+        <button onclick="addPlayer()">Dodaj Gracza</button>
+      </div>
+    </div>
+
+    <div class="image-container">
+      <img src="Wódka-Żubrówka-Biała.png" alt="Right Image" />
+    </div>
+
+    <script>
+      const players = [];
+      const counters = [];
+      const playersContainer = document.getElementById("players");
+
+      function renderPlayers() {
+        playersContainer.innerHTML = "";
+        players.forEach((player, index) => {
+          const playerDiv = document.createElement("div");
+          playerDiv.classList.add("player");
+
+          const nameSpan = document.createElement("span");
+          nameSpan.classList.add("player-name");
+          nameSpan.textContent = player;
+
+          const counterSpan = document.createElement("span");
+          counterSpan.classList.add("player-counter");
+          counterSpan.textContent = counters[index];
+
+          const removeButton = document.createElement("button");
+          removeButton.classList.add("remove-btn");
+          removeButton.textContent = "Usuń";
+          removeButton.onclick = (event) => {
+            event.stopPropagation();
+            removePlayer(index);
+          };
+
+          playerDiv.appendChild(nameSpan);
+          playerDiv.appendChild(counterSpan);
+          playerDiv.appendChild(removeButton);
+          playerDiv.onclick = () => increaseCounter(index);
+
+          playersContainer.appendChild(playerDiv);
+        });
+      }
+
+      function addPlayer() {
+        const name = prompt("Podaj imię nowego gracza:");
+        if (name) {
+          players.push(name);
+          counters.push(0);
+          renderPlayers();
+        }
+      }
+
+      function removePlayer(index) {
+        players.splice(index, 1);
+        counters.splice(index, 1);
+        renderPlayers();
+      }
+
+      function increaseCounter(index) {
+        counters[index]++;
+        if (counters[index] === 3) {
+          counters[index] = 0;
+        }
+        renderPlayers();
+      }
+    </script>
+  </body>
+</html>
