@@ -233,18 +233,6 @@
         100% {
           height: 90%;
         }
-
-              .controls button {
-        background: #1e90ff;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        cursor: pointer;
-        border-radius: 5px;
-        font-size: 1em;
-        font-weight: bold;
-        transition: background 0.3s ease;
-      }
       }
     </style>
   </head>
@@ -303,10 +291,9 @@
       </div>
     </div>
 
-        <script>
+<script>
       const players = [];
       const counters = [];
-      const counters2 = []; // New array for second counter
       const playersContainer = document.getElementById("players");
 
       function renderPlayers() {
@@ -319,41 +306,9 @@
           nameSpan.classList.add("player-name");
           nameSpan.textContent = player;
 
-          const countersDiv = document.createElement("div");
-          countersDiv.classList.add("player-counters");
-
-          // First counter group
-          const counterGroup1 = document.createElement("div");
-          counterGroup1.classList.add("counter-group");
-
           const counterSpan = document.createElement("span");
           counterSpan.classList.add("player-counter");
           counterSpan.textContent = counters[index];
-
-          counterGroup1.appendChild(counterSpan);
-          counterGroup1.onclick = (event) => {
-            event.stopPropagation();
-            increaseCounter(index);
-          };
-
-          // Second counter group
-          const counterGroup2 = document.createElement("div");
-          counterGroup2.classList.add("counter-group");
-
-          const counter2Span = document.createElement("span");
-          counter2Span.classList.add("player-counter2");
-          counter2Span.textContent = counters2[index];
-
-          const addButton = document.createElement("button");
-          addButton.classList.add("add-btn");
-          addButton.textContent = "+1";
-          addButton.onclick = (event) => {
-            event.stopPropagation();
-            increaseCounter2(index);
-          };
-
-          counterGroup2.appendChild(counter2Span);
-          counterGroup2.appendChild(addButton);
 
           const removeButton = document.createElement("button");
           removeButton.classList.add("remove-btn");
@@ -363,12 +318,10 @@
             removePlayer(index);
           };
 
-          countersDiv.appendChild(counterGroup1);
-          countersDiv.appendChild(counterGroup2);
-
           playerDiv.appendChild(nameSpan);
-          playerDiv.appendChild(countersDiv);
+          playerDiv.appendChild(counterSpan);
           playerDiv.appendChild(removeButton);
+          playerDiv.onclick = () => increaseCounter(index);
 
           playersContainer.appendChild(playerDiv);
         });
@@ -379,7 +332,6 @@
         if (name) {
           players.push(name);
           counters.push(0);
-          counters2.push(0); // Initialize second counter
           renderPlayers();
         }
       }
@@ -387,7 +339,6 @@
       function removePlayer(index) {
         players.splice(index, 1);
         counters.splice(index, 1);
-        counters2.splice(index, 1); // Remove second counter
         renderPlayers();
       }
 
@@ -396,11 +347,6 @@
         if (counters[index] === 3) {
           counters[index] = 0;
         }
-        renderPlayers();
-      }
-
-      function increaseCounter2(index) {
-        counters2[index]++;
         renderPlayers();
       }
     </script>
