@@ -234,6 +234,29 @@
           height: 90%;
         }
       }
+
+      /* NOWE: Dodajemy style dla drugiego licznika i przycisku "Dodaj 1" */
+      .separate-counter { /* klasa przypisana w kodzie JS */
+        font-size: 1.1em;
+        font-weight: bold;
+        margin: 0 10px; 
+        color: #666; 
+      }
+      .add-one-btn { /* klasa przypisana w kodzie JS */
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 7px 10px;
+        cursor: pointer;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: background 0.3s ease;
+        margin-left: 5px;
+      }
+      .add-one-btn:hover {
+        background-color: #218838;
+      }
+      /* KONIEC NOWEGO */
     </style>
   </head>
   <body>
@@ -294,6 +317,10 @@
     <script>
       const players = [];
       const counters = [];
+
+      // NOWE: Drugi, osobny licznik dla każdego gracza
+      const separateCounters = []; // <--- Nowa tablica
+
       const playersContainer = document.getElementById("players");
 
       function renderPlayers() {
@@ -321,8 +348,26 @@
           playerDiv.appendChild(nameSpan);
           playerDiv.appendChild(counterSpan);
           playerDiv.appendChild(removeButton);
-          playerDiv.onclick = () => increaseCounter(index);
 
+          // NOWE: Wyświetlenie osobnego licznika + przycisk "Dodaj 1"
+          const separateCounterSpan = document.createElement("span");
+          separateCounterSpan.classList.add("separate-counter"); // klasa z CSS
+          separateCounterSpan.style.margin = "0 10px"; // (pozostawiamy, żeby nie modyfikować istniejącej linii)
+          separateCounterSpan.textContent = separateCounters[index];
+          playerDiv.appendChild(separateCounterSpan);
+
+          const addOneButton = document.createElement("button");
+          addOneButton.classList.add("add-one-btn"); // klasa z CSS
+          addOneButton.textContent = "Dodaj 1";
+          addOneButton.onclick = (event) => {
+            event.stopPropagation();
+            separateCounters[index]++;
+            separateCounterSpan.textContent = separateCounters[index];
+          };
+          playerDiv.appendChild(addOneButton);
+          // KONIEC NOWEGO
+
+          playerDiv.onclick = () => increaseCounter(index);
           playersContainer.appendChild(playerDiv);
         });
       }
@@ -332,6 +377,8 @@
         if (name) {
           players.push(name);
           counters.push(0);
+          // NOWE: Dodajemy też 0 do osobnego licznika
+          separateCounters.push(0); 
           renderPlayers();
         }
       }
@@ -339,6 +386,8 @@
       function removePlayer(index) {
         players.splice(index, 1);
         counters.splice(index, 1);
+        // NOWE: Usuwamy też licznik z tablicy separateCounters
+        separateCounters.splice(index, 1);
         renderPlayers();
       }
 
